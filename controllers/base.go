@@ -12,3 +12,8 @@ type BaseController struct {
 func (this *BaseController) Prepare() {
 	this.Data["Path"] = this.Ctx.Request.RequestURI //添加模板变量
 }
+
+func (this *BaseController) Abort500(err error) {
+	this.Data["error"] = err
+	this.Abort("500")
+}

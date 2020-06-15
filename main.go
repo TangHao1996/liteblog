@@ -14,7 +14,8 @@ func main() {
 }
 
 func initTemplat() {
-	beego.AddFuncMap("equal", func(x, y string) bool { //添加html模板函数
+	//添加html模板函数
+	beego.AddFuncMap("equal", func(x, y string) bool {
 		x = strings.Trim(x, "/")
 		y = strings.Trim(y, "/")
 		return strings.Compare(x, y) == 0
