@@ -10,6 +10,7 @@ import (
 
 func main() {
 	initTemplat()
+	initSession()
 	beego.Run()
 }
 
@@ -20,4 +21,12 @@ func initTemplat() {
 		y = strings.Trim(y, "/")
 		return strings.Compare(x, y) == 0
 	})
+}
+
+//考虑换成redis
+func initSession() {
+	beego.BConfig.WebConfig.Session.SessionOn = true
+	beego.BConfig.WebConfig.Session.SessionName = "liteblog"
+	beego.BConfig.WebConfig.Session.SessionProvider = "file"
+	beego.BConfig.WebConfig.Session.SessionProviderConfig = "data/session"
 }

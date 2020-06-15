@@ -22,5 +22,20 @@ func init() {
 	if err != nil {
 		panic("failed to connect database" + err.Error())
 	}
+	db.SingularTable(true)
 	logs.Info("database connected")
+
+	//同步表结构, 如果没有表就创建一个
+	db.AutoMigrate(&User{})
+	//若当前没有用户记录
+	var cnt int
+	if err := db.Model(&User{}).Count(&cnt).Error; err == nil && cnt == 0 {
+		db.Create(&User{
+			Name:     "admin",
+			Email:    "tanghao1996.seu@gmail.com",
+			password: "123456",
+			Avatar:   "/static/images/info-img.png",
+			Role:     0,
+		})
+	}
 }
