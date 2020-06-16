@@ -12,11 +12,20 @@ func (this *IndexController) Index() {
 
 //@router /message [get]
 func (this *IndexController) Message() {
-	this.Abort("404")
 	this.TplName = "message.html" //views/tpl
 }
 
 //@router /about [get]
 func (this *IndexController) About() {
 	this.TplName = "about.html" //views/tpl
+}
+
+//@router /user [get]
+func (this *IndexController) User() {
+	this.TplName = "user.html" //views/tpl
+}
+
+// @router /goRegister [get]
+func (this *UserController) GoRegister() {
+	this.TplName = "register.html"
 }

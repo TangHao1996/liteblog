@@ -1,7 +1,7 @@
 <div class="header">
     <div class="header-wrap">
         <h1 class="logo pull-left">
-            <a href="index.html">
+            <a href="/">
                 <img src="../static/images/logo.png" alt="" class="logo-img">
                 <img src="../static/images/logo-text.png" alt="" class="logo-text">
             </a>
@@ -20,8 +20,12 @@
               <li class="layui-nav-item {{if equal .Path "/message"}}layui-this{{end}}"><a href="/message">留言</a></li>
               <li class="layui-nav-item {{if equal .Path "/about"}}layui-this{{end}}"><a href="/about">关于</a></li>
             </ul>
-            <a href="#" class="personal pull-left">
+            <a href="/user" class="personal pull-left">
                 <i class="layui-icon layui-icon-username"></i>
+                {{if .islogin}}
+                <span style = "color: aliceblue;">{{.User.Name}}</span>
+                <a href="/logout"><span style = "color: rgb(8, 59, 104);"></span>(logout)</a>
+                {{end}}
             </a>
         </div>
         <div class="mobile-nav pull-right" id="mobile-nav">

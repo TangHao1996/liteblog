@@ -23,7 +23,7 @@ func (this *ErrorController) Error404() {
 
 func (this *ErrorController) Error500() {
 	this.TplName = "error/500.html"
-	//这个变量是在哪里加的？
+	//"error"字段在abort时加入
 	err, ok := this.Data["error"].(error)
 	if !ok {
 		err = syserror.New("unknown error", nil)

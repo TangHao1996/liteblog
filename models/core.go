@@ -13,12 +13,32 @@ var (
 	db *gorm.DB
 )
 
+//登录查询
+func QueryUserByEmailAndPassword(email, password string) (user User, err error) {
+	return user, db.Where("email = ? and password = ?", email, password).Take(&user).Error
+}
+
+//查询用户名
+func QueryUserByName(name string) (user User, err error) {
+	return user, db.Where("name = ?", name).Take(&user).Error
+}
+
+//查询邮箱
+func QueryUserByEmail(email string) (user User, err error) {
+	return user, db.Where("email = ?", email).Take(&user).Error
+}
+
+func CreateUser(u User) error {
+	return db.Create(&u).Error
+}
+
 func init() {
 	var err error
 	if err = os.MkdirAll("data", 0777); err != nil {
 		panic(err.Error())
 	}
-	db, err = gorm.Open("mysql", "root:th1996@tcp(127.0.0.1:3306)/liteblog?charset=utf8")
+	//parseTime是将时间转为time类型，不加会查询失败
+	db, err = gorm.Open("mysql", "root:th1996@tcp(127.0.0.1:3306)/liteblog?charset=utf8&parseTime=true")
 	if err != nil {
 		panic("failed to connect database" + err.Error())
 	}
@@ -33,7 +53,7 @@ func init() {
 		db.Create(&User{
 			Name:     "admin",
 			Email:    "tanghao1996.seu@gmail.com",
-			password: "123456",
+			Password: "123456",
 			Avatar:   "/static/images/info-img.png",
 			Role:     0,
 		})

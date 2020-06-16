@@ -15,11 +15,12 @@ type Model struct {
 */
 
 //字段tag
+//字段必须大写开头
 type User struct {
 	gorm.Model
 	Name     string `gorm:"unique_index"`
 	Email    string `gorm:"unique_index"`
-	password string
+	Password string
 	Avatar   string
 	Role     int `gorm:"default:1"` //0: administrator, 1: user
 }
