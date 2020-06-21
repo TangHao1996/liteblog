@@ -64,3 +64,37 @@ func (this *UserController) Register() {
 	//成功
 	this.JsonOK("注册成功", "/user")
 }
+
+// @router /upload [get]
+func (this *UserController) UploadPage() {
+	this.TplName = "upload.html"
+}
+
+// @router /upload [post]
+func (this *UserController) Upload() {
+	//this.JsonOK("上传成功", "/upload")
+	file, _, err := this.GetFile("filename")
+	defer file.Close()
+	if err != nil {
+		this.Abort500(errors.New("上传失败1"))
+	}
+
+	savename := "myfile.txt"
+	err = this.SaveToFile("filename", "static/videos/"+savename) //前面不能加'/'
+	if err != nil {
+		this.Abort500(syserror.New("上传失败", err))
+	}
+
+	//TODO 登录检测， 文件合法检测，数据库插入视频entry
+	this.Redirect("/user", 302)
+}
+
+// @router /userVideos [get]
+func (this *UserController) UserVideos() {
+	this.TplName = "userVideo.html"
+	page, err := this.GetInt("page", 1)
+	if err != nil || page <= 0 {
+		page = 1
+	}
+	//models.QueryVideosByPage(page)
+}

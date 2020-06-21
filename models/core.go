@@ -13,25 +13,6 @@ var (
 	db *gorm.DB
 )
 
-//登录查询
-func QueryUserByEmailAndPassword(email, password string) (user User, err error) {
-	return user, db.Where("email = ? and password = ?", email, password).Take(&user).Error
-}
-
-//查询用户名
-func QueryUserByName(name string) (user User, err error) {
-	return user, db.Where("name = ?", name).Take(&user).Error
-}
-
-//查询邮箱
-func QueryUserByEmail(email string) (user User, err error) {
-	return user, db.Where("email = ?", email).Take(&user).Error
-}
-
-func CreateUser(u User) error {
-	return db.Create(&u).Error
-}
-
 func init() {
 	var err error
 	if err = os.MkdirAll("data", 0777); err != nil {
@@ -46,14 +27,14 @@ func init() {
 	logs.Info("database connected")
 
 	//同步表结构, 如果没有表就创建一个
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&User{}, &Note{})
 	//若当前没有用户记录
 	var cnt int
 	if err := db.Model(&User{}).Count(&cnt).Error; err == nil && cnt == 0 {
 		db.Create(&User{
 			Name:     "admin",
 			Email:    "tanghao1996.seu@gmail.com",
-			Password: "123456",
+			Password: "th1996",
 			Avatar:   "/static/images/info-img.png",
 			Role:     0,
 		})

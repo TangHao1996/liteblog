@@ -5,10 +5,16 @@ import (
 	"liteblog/models"
 	"liteblog/syserror.go"
 
+	uuid "github.com/satori/go.uuid"
+
 	"github.com/astaxie/beego"
 )
 
 const SESSION_USER_KEY = "SESSION_USER_KEY"
+const (
+	ADMIN = 0
+	USER  = 1
+)
 
 type BaseController struct {
 	beego.Controller
@@ -16,7 +22,11 @@ type BaseController struct {
 	IsLogin bool
 }
 
-//所有继承该controller的controller都会先调用该prepare再执行自己的handler
+type NextPreparer interface {
+	NextPrepare()
+}
+
+//所有继承该controller的controller都会先调用this.prepare()再执行路由handler
 func (this *BaseController) Prepare() {
 	this.Data["Path"] = this.Ctx.Request.RequestURI //添加模板变量
 
@@ -27,6 +37,10 @@ func (this *BaseController) Prepare() {
 		this.Data["User"] = this.User
 	}
 	this.Data["islogin"] = this.IsLogin
+	//若controller实现了NextPrepare()
+	if a, ok := this.AppController.(NextPreparer); ok {
+		a.NextPrepare()
+	}
 }
 
 func (this *BaseController) Abort500(err error) {
@@ -67,4 +81,12 @@ func (this *BaseController) JsonOKData(msg string, data JsonData) {
 	this.Data["json"] = data
 	//将Data中的“json"发送
 	this.ServeJSON()
+}
+
+func (this *BaseController) UUID() string {
+	u, err := uuid.NewV4()
+	if err != nil {
+		this.Abort500(syserror.New("系统错误", err))
+	}
+	return u.String()
 }

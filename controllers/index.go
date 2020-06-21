@@ -29,3 +29,8 @@ func (this *IndexController) User() {
 func (this *UserController) GoRegister() {
 	this.TplName = "register.html"
 }
+
+// @router /play [get]
+func (this *UserController) GoPlay() {
+	this.TplName = "play.html"
+}
