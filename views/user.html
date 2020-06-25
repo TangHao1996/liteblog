@@ -12,40 +12,22 @@
 		<div class="container-wrap">
 			<div class="container">
 					<div class="contar-wrap">
+
 						<div class="item">
-              {{if .islogin}}
+              <h4 class="item-title">
               <p><span>欢迎, {{.User.Name}}</span></p>
-              {{else}}
-							<div class="item-box  layer-photos-demo1 layer-photos-demo">
-                <form class="layui-form" action="">
+              </h4>
+            </div>
 
-                    <div class="layui-form-item">
-                      <label class="layui-form-label">邮箱</label>
-                      <div class="layui-input-inline">
-                        <input type="text" name="email" required  lay-verify="required" placeholder="请输入邮箱" 
-                        autocomplete="off" class="layui-input">
-                      </div>
-                    </div>
-
-                    <div class="layui-form-item">
-                      <label class="layui-form-label">密码</label>
-                      <div class="layui-input-inline">
-                        <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" 
-                        autocomplete="off" class="layui-input">
-                      </div>
-                    </div> 
-
-                    <div class="layui-form-item">
-                      <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="login">登录</button>
-                        <button onclick="window.location.href='/goRegister'" class="layui-btn layui-btn-primary">注册</button>
-                      </div>
-                    </div>
-
-                </form>                       		
-              </div>
-              {{end}}
-						</div>						
+            <div class="item">	
+              <h4 class="item-title">
+                <p>
+                    <a href="/note/new"><i class="layui-icon layui-icon-add-1">&#xe654</i>
+                      <span>创建博客</span></a>
+                </p>
+              </h4>
+            </div>
+            			
 					</div>
 			</div>
 		</div>

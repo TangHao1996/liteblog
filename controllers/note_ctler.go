@@ -22,13 +22,14 @@ func (this *NoteController) NextPrepare() {
 }
 
 // @router /new [get]
-func (this *NoteController) Index() {
+func (this *NoteController) NewNote() {
 	this.Data["key"] = this.UUID()
 	this.TplName = "note_new.html"
 }
 
 // @router /save/:key [post]
 func (this *NoteController) Save() {
+	//key由进入新建界面时生成
 	key := this.Ctx.Input.Param(":key")
 	title := this.GetMustString("title", "标题不能为空！")
 	content := this.GetMustString("content", "内容不能为空！")

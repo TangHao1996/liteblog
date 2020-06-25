@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -29,6 +31,15 @@ type Note struct {
 //多个表时要加表名
 func QueryNoteByKey(key string) (note Note, err error) {
 	return note, db.Where("note.key = ?", key).Take(&note).Error
+}
+
+//按页得到一组note
+func QueryNotesByPage(searchWord string, page, limit int) (notes []*Note, err error) {
+	return notes, db.Where("title like ?", fmt.Sprintf("%%%s%%", searchWord)).Offset((page - 1) * limit).Limit(limit).Find(&notes).Error
+}
+
+func QueryNoteCount(searchWord string) (count int, err error) {
+	return count, db.Where("title like ?", fmt.Sprintf("%%%s%%", searchWord)).Model(&Note{}).Count(&count).Error
 }
 
 func CreateNote(note *Note) error {

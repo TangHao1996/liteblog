@@ -27,7 +27,7 @@ func init() {
 	logs.Info("database connected")
 
 	//同步表结构, 如果没有表就创建一个
-	db.AutoMigrate(&User{}, &Note{})
+	db.AutoMigrate(&User{}, &Note{}, &Comment{})
 	//若当前没有用户记录
 	var cnt int
 	if err := db.Model(&User{}).Count(&cnt).Error; err == nil && cnt == 0 {

@@ -23,6 +23,9 @@ func initTemplat() {
 		y = strings.Trim(y, "/")
 		return strings.Compare(x, y) == 0
 	})
+	beego.AddFuncMap("add", func(x, y int) int {
+		return x + y
+	})
 }
 
 //考虑换成redis
