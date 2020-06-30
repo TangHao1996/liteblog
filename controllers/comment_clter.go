@@ -9,7 +9,7 @@ type CommentController struct {
 	BaseController
 }
 
-// @router /new/?:notekey [post]
+// @router /new/:notekey [post]
 func (this *CommentController) New() {
 	this.MustLogin()
 	content := this.GetMustString("content", "内容不能为空")

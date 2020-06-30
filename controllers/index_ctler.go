@@ -101,7 +101,14 @@ func (this *IndexController) Details() {
 	if err != nil {
 		this.Abort500(syserror.New("未找到内容", err))
 	}
-	note.Visit++
+
+	comments, _ := models.QueryCommentByNote(key)
+	//动态获取评论user信息
+	for _, c := range comments {
+		u, _ := models.QueryUserById(c.UserId)
+		c.User = u
+	}
+
 	this.Data["note"] = note
 	this.Data["title"] = note.Title
 	this.Data["updatedAt"] = note.UpdatedAt
@@ -109,7 +116,9 @@ func (this *IndexController) Details() {
 	this.Data["author"] = note.User.Name
 	this.Data["visit"] = note.Visit
 	this.Data["like"] = note.Like
+	this.Data["comments"] = comments
 
+	note.Visit++
 	models.SaveNote(&note)
 }
 

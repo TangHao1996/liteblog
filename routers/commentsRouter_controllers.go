@@ -10,7 +10,7 @@ func init() {
     beego.GlobalControllerRouter["liteblog/controllers:CommentController"] = append(beego.GlobalControllerRouter["liteblog/controllers:CommentController"],
         beego.ControllerComments{
             Method: "New",
-            Router: "/new/?:notekey",
+            Router: "/new/:notekey",
             AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
