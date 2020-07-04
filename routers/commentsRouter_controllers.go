@@ -45,15 +45,6 @@ func init() {
 
     beego.GlobalControllerRouter["liteblog/controllers:IndexController"] = append(beego.GlobalControllerRouter["liteblog/controllers:IndexController"],
         beego.ControllerComments{
-            Method: "GoComment",
-            Router: "/comment/:key",
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["liteblog/controllers:IndexController"] = append(beego.GlobalControllerRouter["liteblog/controllers:IndexController"],
-        beego.ControllerComments{
             Method: "Details",
             Router: "/details/:key",
             AllowHTTPMethods: []string{"get"},
@@ -102,6 +93,15 @@ func init() {
             Method: "User",
             Router: "/user",
             AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["liteblog/controllers:LikeController"] = append(beego.GlobalControllerRouter["liteblog/controllers:LikeController"],
+        beego.ControllerComments{
+            Method: "Like",
+            Router: "/:type/:key",
+            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})

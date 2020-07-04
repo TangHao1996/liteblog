@@ -10,24 +10,39 @@ type IndexController struct {
 }
 
 //注解路由，只要加上如下注释，则只用include该controller就能自动注册这些函数
-//@router /  [get]
+
+//@router / [get]
 func (this *IndexController) Index() {
-	limit := 5
+	//TODO 根据浏览量和点赞显示首页文章, 浏览量和点赞存于redis
+	searchWord := this.GetString("searchWord")
+	if len(searchWord) == 0 {
+		notes := models.GetIndexPageNotes()
+
+		this.Data["notes"] = notes
+		this.TplName = "index.html" //views/tpl
+	} else {
+		//搜索
+		this.SearchNote()
+	}
+}
+
+func (this *IndexController) SearchNote() {
+	limit := 1
 	page, err := this.GetInt("page", 1)
 	if err != nil || page <= 0 {
 		page = 1
 	}
-
-	searchWord := this.GetString("title")
+	//TODO 根据浏览量和点赞显示首页文章, 浏览量和点赞存于redis
+	searchWord := this.GetString("searchWord")
 
 	notes, err := models.QueryNotesByPage(searchWord, page, limit)
 	if err != nil {
-		this.Abort500(syserror.New("获取博客失败", err))
+		this.Abort500(syserror.New("获取文章失败", err))
 	}
 
 	count, err := models.QueryNoteCount(searchWord)
 	if err != nil {
-		this.Abort500(syserror.New("获取博客失败", err))
+		this.Abort500(syserror.New("获取文章失败", err))
 	}
 
 	totalPage := count / limit
@@ -35,10 +50,12 @@ func (this *IndexController) Index() {
 		totalPage++
 	}
 
+	this.Data["count"] = count
 	this.Data["totalPage"] = totalPage
 	this.Data["page"] = page
+	this.Data["searchWord"] = searchWord
 	this.Data["notes"] = notes
-	this.TplName = "index.html" //views/tpl
+	this.TplName = "searchNote.html" //views/tpl
 }
 
 //@router /message [get]
@@ -109,21 +126,18 @@ func (this *IndexController) Details() {
 		c.User = u
 	}
 
+	//visit改为一直保存在redis中
+	models.IncrVisit(key)
+	visit := models.QueryNoteVisitByKey(key)
+	like := models.QueryNoteLikeByKey(key)
+
 	this.Data["note"] = note
 	this.Data["title"] = note.Title
 	this.Data["updatedAt"] = note.UpdatedAt
 	this.Data["content"] = note.Content
 	this.Data["author"] = note.User.Name
-	this.Data["visit"] = note.Visit
-	this.Data["like"] = note.Like
+	this.Data["visit"] = visit
+	this.Data["like"] = like
 	this.Data["comments"] = comments
 
-	note.Visit++
-	models.SaveNote(&note)
-}
-
-//@router /comment/:key [post]
-func (this *IndexController) GoComment() {
-
-	//this.TplName = "comment.html"
 }

@@ -19,6 +19,9 @@ func init() {
 		beego.NewNamespace("comment",
 			beego.NSInclude(&controllers.CommentController{}),
 		),
+		beego.NewNamespace("like",
+			beego.NSInclude(&controllers.LikeController{}),
+		),
 	)
 
 }

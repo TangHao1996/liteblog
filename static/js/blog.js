@@ -85,27 +85,48 @@ layui.define(['element', 'form','laypage','jquery','laytpl'],function(exports){
     },1000);    
   }
 
-  $(function () {
-    $(".like").on('click',function () {
-     
+  function like() {     
       if(!($(this).hasClass("layblog-this"))){
-        this.text = '已赞';
-        $(this).addClass('layblog-this');
-        $.tipsBox({
-          obj: $(this),
-          str: "+1",
-          callback: function () {
-          }
-        });
-        niceIn($(this));
-        layer.msg('点赞成功', {
-          icon: 6
-          ,time: 1000
-        })
+          var type = $(this).data("type");
+          var key = $(this).data("key");
+          var that = this;
+        $.post("/like/"+type+"/"+key, function(data){
+            if(data.code == 0){
+              that.text = '已赞';
+              $(that).addClass('layblog-this');
+              $.tipsBox({
+                obj: $(that),
+                str: "+1",
+                callback: function () {
+                }
+              });
+              niceIn($(that));
+              layer.msg('点赞成功', {
+                icon: 6
+                ,time: 1000
+              });
+              $(that).find(".value").text(data.like || 0)
+            }else{
+              if(data.code == 4444){
+                  //已赞过
+                  $(that).addClass('layblog-this');
+              }else {
+                layer.msg(data.msg, {
+                  icon: 5
+                  ,time: 1000
+                });
+              }
+            }
+        }).error(function(){
+            layer.msg("点赞失败");
+        }).run();
+        
       } 
-    });
-  });
+  }
 
+  $(function () {
+    $(".like").on('click', like);
+  });
   //end 评论的特效
 
 
